@@ -1,9 +1,11 @@
 <script lang="ts">
-  import { App } from "$types/app";
+  import MarkdownRenderer from "$lib/Components/MarkdownRenderer.svelte";
   import "./css/main.css";
+  import { Runtime } from "./ts/runtime";
 
-  export let app: App;
+  export let runtime: Runtime;
+
+  const { buffer } = runtime;
 </script>
 
-<h1>Hello, World!</h1>
-<p>Working! App {app.metadata.name}, version {app.metadata.version}.</p>
+<MarkdownRenderer content={$buffer} />

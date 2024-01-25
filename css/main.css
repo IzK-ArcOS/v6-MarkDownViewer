@@ -1,3 +1,6 @@
-window#appTemplate { /* Rename appTemplate to the ID of the app */
-  color: #f0f;
+#MarkDownViewer > div.body {
+  padding: 15px;
+  border-top: var(--win-border);
+  flex-grow: 1;
+  background-color: var(--win-bg);
 }

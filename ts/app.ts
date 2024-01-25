@@ -1,33 +1,35 @@
-import { DefaultIcon } from "$ts/images/apps";
-import { Runtime } from "./runtime";
-import AppSvelte from "../App.svelte";
+import { MarkdownMimeIcon } from "$ts/images/mime";
 import { App } from "$types/app";
+import AppSvelte from "../App.svelte";
+import { Runtime } from "./runtime";
 
-export const app: App = {
+export const MarkDownViewer: App = {
   metadata: {
-    name: "App Template",
-    description: "This is an app template",
-    author: "The ArcOS Team",
-    version: "0.0.0",
-    icon: DefaultIcon
+    name: "Markdown Viewer",
+    description: "View Markdown files",
+    author: "ArcOS Team",
+    version: "2.0.0",
+    icon: MarkdownMimeIcon,
+    appGroup: "utilities",
   },
   runtime: Runtime,
   content: AppSvelte,
-  id: "appTemplate",
-  size: { w: 0, h: 0 },
-  minSize: { w: 0, h: 0 },
-  maxSize: { w: 0, h: 0 },
-  pos: { x: 0, y: 0 },
+  id: "MarkDownViewer",
+  size: { w: 700, h: 500 },
+  minSize: { w: 480, h: 500 },
+  maxSize: { w: 1800, h: 1000 },
+  pos: { x: 60, y: 60 },
   state: {
     minimized: false,
     maximized: false,
     headless: false,
     fullscreen: false,
-    resizable: false
+    resizable: true,
   },
   controls: {
-    minimize: false,
-    maximize: false,
-    close: false
-  }
-}
+    minimize: true,
+    maximize: true,
+    close: true,
+  },
+  glass: true
+};
