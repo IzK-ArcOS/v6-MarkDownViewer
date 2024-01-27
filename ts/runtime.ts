@@ -4,6 +4,7 @@ import { MarkdownMimeIcon } from "$ts/images/mime";
 import { Process } from "$ts/process";
 import { getParentDirectory } from "$ts/server/fs/dir";
 import { readFile } from "$ts/server/fs/file";
+import { getMimeIcon } from "$ts/server/fs/mime";
 import { FileProgress } from "$ts/server/fs/progress";
 import { pathToFriendlyPath } from "$ts/server/fs/util";
 import { Store } from "$ts/writable";
@@ -51,7 +52,8 @@ export class Runtime extends AppRuntime {
 
     this.buffer.set(await file.data.text())
     this.File.set(file);
-    this.setWindowTitle(file.name, true)
+    this.setWindowTitle(file.name)
+    this.setWindowIcon(getMimeIcon(file.name))
 
     setDone(1);
   }
