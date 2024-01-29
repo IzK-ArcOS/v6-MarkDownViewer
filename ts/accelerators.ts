@@ -18,6 +18,5 @@ export const MarkDownViewerAccelerators: (runtime: Runtime) => AppKeyCombination
         runtime.openFile();
       }
     },
-
   ]
 }

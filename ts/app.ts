@@ -31,5 +31,9 @@ export const MarkDownViewer: App = {
     maximize: true,
     close: true,
   },
-  glass: true
+  glass: true,
+  acceleratorDescriptions: {
+    "alt+shift+o": "Open the file in File Manager",
+    "alt+o": "Open a file"
+  }
 };
