@@ -1,5 +1,7 @@
 import { SEP_ITEM } from "$state/Desktop/ts/store";
+import { TextEditorIcon } from "$ts/images/apps";
 import { AppsIcon } from "$ts/images/general";
+import { ShutdownIcon } from "$ts/images/power";
 import { getPartialFile } from "$ts/server/fs/file";
 import { OpenWith } from "$ts/server/fs/file/handler";
 import { openFileWithApp } from "$ts/server/fs/open";
@@ -12,14 +14,8 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
     subItems: [
       {
         caption: "Open...",
+        icon: "file_open",
         action: () => runtime.openFile(),
-      },
-      {
-        caption: "Open file location",
-        action: () => {
-          runtime.openFileLocation();
-        },
-        disabled: () => !runtime.path.get()
       },
       SEP_ITEM,
       {
@@ -37,6 +33,7 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
       },
       {
         caption: "Edit File",
+        image: TextEditorIcon,
         async action() {
           const path = runtime.path.get();
 
@@ -49,8 +46,18 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
       },
       SEP_ITEM,
       {
+        caption: "Open file location",
+        icon: "folder_open",
+        action: () => {
+          runtime.openFileLocation();
+        },
+        disabled: () => !runtime.path.get()
+      },
+      SEP_ITEM,
+      {
         caption: "Exit",
-        action: () => runtime.process.handler.kill(runtime.pid, true)
+        action: () => { runtime.process.handler.kill(runtime.pid, true) },
+        image: ShutdownIcon
       }
     ]
   }
