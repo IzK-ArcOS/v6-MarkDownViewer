@@ -17,6 +17,7 @@ export class Runtime extends AppRuntime {
   public File = Store<ArcFile>();
   public buffer = Store<string>();
   public path = Store<string>();
+  public wrapper = Store<HTMLDivElement>();
 
   constructor(app: App, mutator: AppMutator, process: Process) {
     super(app, mutator, process);
@@ -40,6 +41,8 @@ export class Runtime extends AppRuntime {
   async readFile(v: string) {
     this.path.set(v);
 
+    if (v.startsWith("@client/")) return await this.readFileQuiet(v);
+
     const { setDone, setErrors } = await this.LoadProgress(v);
 
     const file = await readFile(v);
@@ -53,9 +56,25 @@ export class Runtime extends AppRuntime {
     this.buffer.set(await file.data.text())
     this.File.set(file);
     this.setWindowTitle(file.name)
-    this.setWindowIcon(getMimeIcon(file.name))
+    this.setWindowIcon(getMimeIcon(file.name));
 
     setDone(1);
+  }
+
+  async readFileQuiet(v: string) {
+
+    const file = await readFile(v);
+
+    if (!file) return
+
+    this.buffer.set(await file.data.text())
+    this.File.set(file);
+    this.setWindowTitle(file.name)
+    this.setWindowIcon(getMimeIcon(file.name));
+
+    setTimeout(() => {
+      this.setAnchorRedirects();
+    }, 100);
   }
 
   public openFile() {
@@ -92,5 +111,26 @@ export class Runtime extends AppRuntime {
       working: true,
       errors: 0
     }, this.pid, false)
+  }
+
+  public setAnchorRedirects() {
+    const path = this.path.get();
+    const wrapper = this.wrapper.get();
+
+    if (!path || !wrapper || !path.startsWith("@client/")) {
+      return false;
+    }
+
+    const anchors = wrapper.querySelectorAll("a");
+
+    for (const anchor of anchors) {
+      anchor.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const href = anchor.getAttribute("href");
+
+        this.handleOpenFile(href);
+      });
+    }
   }
 }

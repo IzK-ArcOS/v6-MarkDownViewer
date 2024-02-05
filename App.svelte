@@ -1,11 +1,21 @@
 <script lang="ts">
   import MarkdownRenderer from "$lib/Components/MarkdownRenderer.svelte";
+  import { onMount } from "svelte";
   import "./css/main.css";
   import { Runtime } from "./ts/runtime";
 
   export let runtime: Runtime;
 
   const { buffer } = runtime;
+
+  let wrapper: HTMLDivElement;
+
+  onMount(() => {
+    console.log(wrapper);
+    runtime.wrapper.set(wrapper);
+  });
 </script>
 
-<MarkdownRenderer content={$buffer} />
+<div class="wrapper" bind:this={wrapper}>
+  <MarkdownRenderer content={$buffer} />
+</div>
