@@ -91,6 +91,6 @@ export class Runtime extends AppRuntime {
       waiting: false,
       working: true,
       errors: 0
-    }, this.pid)
+    }, this.pid, false)
   }
 }
