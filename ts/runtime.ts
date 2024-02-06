@@ -18,6 +18,7 @@ export class Runtime extends AppRuntime {
   public buffer = Store<string>();
   public path = Store<string>();
   public wrapper = Store<HTMLDivElement>();
+  public isClient = Store<boolean>(false);
 
   constructor(app: App, mutator: AppMutator, process: Process) {
     super(app, mutator, process);
@@ -40,11 +41,12 @@ export class Runtime extends AppRuntime {
 
   async readFile(v: string) {
     this.path.set(v);
+    this.buffer.set("");
+    this.isClient.set(false);
 
     if (v.startsWith("@client/")) return await this.readFileQuiet(v);
 
     const { setDone, setErrors } = await this.LoadProgress(v);
-
     const file = await readFile(v);
 
     if (!file) {
@@ -57,11 +59,15 @@ export class Runtime extends AppRuntime {
     this.File.set(file);
     this.setWindowTitle(file.name)
     this.setWindowIcon(getMimeIcon(file.name));
+    setTimeout(() => {
+      this.setAnchorRedirects();
+    }, 100);
 
     setDone(1);
   }
 
   async readFileQuiet(v: string) {
+    this.isClient.set(true);
 
     const file = await readFile(v);
 
@@ -69,9 +75,8 @@ export class Runtime extends AppRuntime {
 
     this.buffer.set(await file.data.text())
     this.File.set(file);
-    this.setWindowTitle(file.name)
+    this.setWindowTitle(file.name + (this.isClient.get() ? " (Client file)" : ""));
     this.setWindowIcon(getMimeIcon(file.name));
-
     setTimeout(() => {
       this.setAnchorRedirects();
     }, 100);
@@ -91,7 +96,7 @@ export class Runtime extends AppRuntime {
   public openFileLocation() {
     const path = this.path.get();
 
-    if (!path) return
+    if (!path || this.isClient.get()) return
 
     const split = path.split("/");
     const filename = split[split.length - 1];
@@ -117,7 +122,7 @@ export class Runtime extends AppRuntime {
     const path = this.path.get();
     const wrapper = this.wrapper.get();
 
-    if (!path || !wrapper || !path.startsWith("@client/")) {
+    if (!path || !wrapper) {
       return false;
     }
 
@@ -128,6 +133,8 @@ export class Runtime extends AppRuntime {
         e.preventDefault();
 
         const href = anchor.getAttribute("href");
+
+        if (!href.startsWith("@client")) return;
 
         this.handleOpenFile(href);
       });
