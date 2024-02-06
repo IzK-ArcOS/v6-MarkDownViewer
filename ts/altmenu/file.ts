@@ -28,8 +28,9 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
 
           const partial = await getPartialFile(path);
 
-          OpenWith(partial, runtime.pid, true)
-        }
+          OpenWith(partial, runtime.pid, true);
+        },
+        disabled: () => runtime.isClient.get()
       },
       {
         caption: "Edit File",
@@ -42,7 +43,8 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
           const partial = await getPartialFile(path);
 
           openFileWithApp("TextEditor", partial);
-        }
+        },
+        disabled: () => runtime.isClient.get()
       },
       SEP_ITEM,
       {
@@ -51,7 +53,7 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
         action: () => {
           runtime.openFileLocation();
         },
-        disabled: () => !runtime.path.get()
+        disabled: () => !runtime.path.get() || runtime.isClient.get()
       },
       SEP_ITEM,
       {
