@@ -8,6 +8,7 @@ import { readFile } from "$ts/server/fs/file";
 import { getMimeIcon } from "$ts/server/fs/mime";
 import { FileProgress } from "$ts/server/fs/progress";
 import { pathToFriendlyPath } from "$ts/server/fs/util";
+import { sleep } from "$ts/util";
 import { Store } from "$ts/writable";
 import type { App, AppMutator } from "$types/app";
 import { ArcFile } from "$types/fs";
@@ -56,8 +57,14 @@ export class Runtime extends AppRuntime {
       return
     }
 
-    this.buffer.set(await file.data.text())
+    const content = await file.data.text();
+
+    this.buffer.set("");
+    await sleep(10);
+    this.buffer.set(content);
+
     this.File.set(file);
+
     this.setWindowTitle(file.name)
     this.setWindowIcon(getMimeIcon(file.name));
     setTimeout(() => {
@@ -82,7 +89,7 @@ export class Runtime extends AppRuntime {
     setTimeout(() => {
       this.setAnchorRedirects();
       this.replaceIconSources();
-    }, 10);
+    }, 100);
   }
 
   public openFile() {
