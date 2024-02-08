@@ -1,5 +1,6 @@
 import { getAppById, spawnApp, spawnOverlay } from "$ts/apps";
 import { AppRuntime } from "$ts/apps/runtime";
+import { getAllImages } from "$ts/images";
 import { MarkdownMimeIcon } from "$ts/images/mime";
 import { Process } from "$ts/process";
 import { getParentDirectory } from "$ts/server/fs/dir";
@@ -61,7 +62,8 @@ export class Runtime extends AppRuntime {
     this.setWindowIcon(getMimeIcon(file.name));
     setTimeout(() => {
       this.setAnchorRedirects();
-    }, 100);
+      this.replaceIconSources();
+    }, 10);
 
     setDone(1);
   }
@@ -79,7 +81,8 @@ export class Runtime extends AppRuntime {
     this.setWindowIcon(getMimeIcon(file.name));
     setTimeout(() => {
       this.setAnchorRedirects();
-    }, 100);
+      this.replaceIconSources();
+    }, 10);
   }
 
   public openFile() {
@@ -138,6 +141,26 @@ export class Runtime extends AppRuntime {
 
         this.handleOpenFile(href);
       });
+    }
+  }
+
+  public replaceIconSources() {
+    const path = this.path.get();
+    const wrapper = this.wrapper.get();
+
+    if (!path || !wrapper) {
+      return false;
+    }
+
+    const images = wrapper.querySelectorAll("img");
+    const icons = getAllImages();
+
+    for (const image of images) {
+      for (const id in icons) {
+        const src = image.getAttribute("src");
+
+        if (src == `#${id}`) image.setAttribute("src", icons[id]);
+      }
     }
   }
 }
