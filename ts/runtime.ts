@@ -66,7 +66,7 @@ export class Runtime extends AppRuntime {
     this.File.set(file);
 
     this.setWindowTitle(file.name)
-    this.setWindowIcon(getMimeIcon(file.name));
+    this.setWindowTitle(`Viewing ${file.name}`);
     setTimeout(() => {
       this.setAnchorRedirects();
       this.replaceIconSources();
@@ -84,7 +84,7 @@ export class Runtime extends AppRuntime {
 
     this.buffer.set(await file.data.text())
     this.File.set(file);
-    this.setWindowTitle(file.name + (this.isClient.get() ? " (Client file)" : ""));
+    this.setWindowTitle(`Viewing ${file.name}` + (this.isClient.get() ? " (Client file)" : ""));
     this.setWindowIcon(getMimeIcon(file.name));
     setTimeout(() => {
       this.setAnchorRedirects();

@@ -42,7 +42,9 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
 
           const partial = await getPartialFile(path);
 
-          openFileWithApp("TextEditor", partial);
+          await openFileWithApp("TextEditor", partial);
+
+          runtime.closeApp();
         },
         disabled: () => runtime.isClient.get()
       },
