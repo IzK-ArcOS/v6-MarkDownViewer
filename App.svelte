@@ -11,7 +11,6 @@
   let wrapper: HTMLDivElement;
 
   onMount(() => {
-    console.log(wrapper);
     runtime.wrapper.set(wrapper);
   });
 </script>
