@@ -30,7 +30,7 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
 
           OpenWith(partial, runtime.pid, true);
         },
-        disabled: () => runtime.isClient.get()
+        disabled: () => runtime.isClient.get(),
       },
       {
         caption: "Edit File",
@@ -46,7 +46,7 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
 
           runtime.closeApp();
         },
-        disabled: () => runtime.isClient.get()
+        disabled: () => runtime.isClient.get(),
       },
       SEP_ITEM,
       {
@@ -55,14 +55,16 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
         action: () => {
           runtime.openFileLocation();
         },
-        disabled: () => !runtime.path.get() || runtime.isClient.get()
+        disabled: () => !runtime.path.get() || runtime.isClient.get(),
       },
       SEP_ITEM,
       {
         caption: "Exit",
-        action: () => { runtime.process.handler.kill(runtime.pid, true) },
-        image: ShutdownIcon
-      }
-    ]
-  }
+        action: () => {
+          runtime.process.handler.kill(runtime.pid, true);
+        },
+        image: ShutdownIcon,
+      },
+    ],
+  };
 }

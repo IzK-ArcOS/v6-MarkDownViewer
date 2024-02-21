@@ -29,16 +29,16 @@ export class Runtime extends AppRuntime {
       if (!v) return;
 
       await this.readFile(v);
-    })
+    });
 
     if (process.args.length && typeof process.args[0] === "string") {
-      this.handleOpenFile(process.args[0])
+      this.handleOpenFile(process.args[0]);
     } else {
       this.openFile();
     }
 
     this.loadAltMenu(...MarkDownViewerAltMenu(this));
-    this.process.accelerator.store.push(...MarkDownViewerAccelerators(this))
+    this.process.accelerator.store.push(...MarkDownViewerAccelerators(this));
   }
 
   async readFile(v: string) {
@@ -54,7 +54,7 @@ export class Runtime extends AppRuntime {
     if (!file) {
       setErrors(1);
       setDone(1);
-      return
+      return;
     }
 
     const content = await file.data.text();
@@ -65,7 +65,7 @@ export class Runtime extends AppRuntime {
 
     this.File.set(file);
 
-    this.setWindowTitle(file.name)
+    this.setWindowTitle(file.name);
     this.setWindowTitle(`Viewing ${file.name}`);
     setTimeout(() => {
       this.setAnchorRedirects();
@@ -80,9 +80,9 @@ export class Runtime extends AppRuntime {
 
     const file = await readFile(v);
 
-    if (!file) return
+    if (!file) return;
 
-    this.buffer.set(await file.data.text())
+    this.buffer.set(await file.data.text());
     this.File.set(file);
     this.setWindowTitle(`Viewing ${file.name}` + (this.isClient.get() ? " (Client file)" : ""));
     this.setWindowIcon(getMimeIcon(file.name));
@@ -98,7 +98,7 @@ export class Runtime extends AppRuntime {
         title: "Select Markdown file to open",
         icon: MarkdownMimeIcon,
         extensions: [".md"],
-        startDir: getParentDirectory(this.path.get() || "./")
+        startDir: getParentDirectory(this.path.get() || "./"),
       },
     ]);
   }
@@ -106,26 +106,30 @@ export class Runtime extends AppRuntime {
   public openFileLocation() {
     const path = this.path.get();
 
-    if (!path || this.isClient.get()) return
+    if (!path || this.isClient.get()) return;
 
     const split = path.split("/");
     const filename = split[split.length - 1];
 
-    spawnApp("FileManager", 0, [path.replace(`/${filename}`, ""), path])
+    spawnApp("FileManager", 0, [path.replace(`/${filename}`, ""), path]);
   }
 
   public async LoadProgress(v: string = this.path.get()) {
-    return await FileProgress({
-      caption: "Reading Document",
-      subtitle: pathToFriendlyPath(v),
-      icon: MarkdownMimeIcon,
-      max: 1,
-      done: 0,
-      type: "quantity",
-      waiting: false,
-      working: true,
-      errors: 0
-    }, this.pid, false)
+    return await FileProgress(
+      {
+        caption: "Reading Document",
+        subtitle: pathToFriendlyPath(v),
+        icon: MarkdownMimeIcon,
+        max: 1,
+        done: 0,
+        type: "quantity",
+        waiting: false,
+        working: true,
+        errors: 0,
+      },
+      this.pid,
+      false
+    );
   }
 
   public setAnchorRedirects() {

@@ -9,14 +9,14 @@ export const MarkDownViewerAccelerators: (runtime: Runtime) => AppKeyCombination
       shift: true,
       action() {
         runtime.openFileLocation();
-      }
+      },
     },
     {
       key: "o",
       alt: true,
       action() {
         runtime.openFile();
-      }
+      },
     },
-  ]
-}
+  ];
+};

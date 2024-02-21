@@ -9,5 +9,5 @@ export const MarkDownViewerHandler: FileHandler = {
   description: "Open this file in Markdown Viewer",
   handler(file) {
     openFileWithApp("MarkDownViewer", file);
-  }
+  },
 };
