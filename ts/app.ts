@@ -1,3 +1,4 @@
+import { SafeMode } from "$state/Desktop/ts/store";
 import { MarkdownMimeIcon } from "$ts/images/mime";
 import { App } from "$types/app";
 import AppSvelte from "../App.svelte";
@@ -36,4 +37,5 @@ export const MarkDownViewer: App = {
     "alt+shift+o": "Open the file in File Manager",
     "alt+o": "Open a file",
   },
+  loadCondition: () => !SafeMode.get(),
 };
