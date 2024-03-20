@@ -1,5 +1,6 @@
 import { SafeMode } from "$state/Desktop/ts/store";
 import { MarkdownMimeIcon } from "$ts/images/mime";
+import { HelpArticles } from "$ts/stores/articles";
 import { App } from "$types/app";
 import AppSvelte from "../App.svelte";
 import { Runtime } from "./runtime";
@@ -38,4 +39,5 @@ export const MarkDownViewer: App = {
     "alt+o": "Open a file",
   },
   loadCondition: () => !SafeMode.get(),
+  helpArticle: HelpArticles.markdownViewer,
 };
